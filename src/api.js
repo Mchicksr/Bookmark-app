@@ -54,12 +54,25 @@ const makeBody = (bookmark) => {
 
 function createUrl(bookmark){
   let body = JSON.stringify(bookmark)
-  return listApiFetch(`${BASE_URL}/bookmarks`,
+
+
+  fetch(`${BASE_URL}`, {
+  method: 'post',
+  headers: {
+      'Accept': 'application/json, text/plain, */*',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(bookmark)
+  }).then(res=>res.json()).then(res => console.log(res));
+
+  /*
+  return listApiFetch(`${BASE_URL}`,
     {
       method: 'POST',
       headers: {'content-Type': 'application/json'},
-      body
-    }); 
+      body: body
+    });
+  */
 };
 
 const deleteItem =function (id) {
@@ -85,4 +98,3 @@ export default {
 
   
 };
-

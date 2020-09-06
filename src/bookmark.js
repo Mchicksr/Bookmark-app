@@ -3,6 +3,8 @@ import store from './store';
 import api from './api';
 import data from './data';
 window.$ = $;
+
+
 /////////////////
 // GenerateHTML//
 ////////////////
@@ -80,20 +82,22 @@ const generateMain = function () {
 };
 
 const generateBookmark = function (item) {
-  return `
-  <article class='bookmark'>
-            <h2>${item.title}</h2>
-            <p> <a href=${item.url}>${item.url}</a></p> 
-            <p>${item.desc}</p>
-            <p> ${item.rating}stars</p>
-        </article>`
+  document.querySelector('section').innerHTML += 
+    `<article class='bookmark'>
+        <h2>${item.title}</h2>
+        <p> <a href=${item.url}>${item.url}</a></p> 
+        <p>${item.desc}</p>
+        <p> ${item.stars}</p>
+      </article>`
 };
+
+
 //////////
 //Tester//
 //////////
 
 const generateLinkItemsString = function (linkList) {
-  const items = linkList.map((item) => generateItemElement(item));
+  const items = linkList.map((item) => generateMain(item));
   return items.join('');
 };
 
@@ -121,8 +125,6 @@ const generateError = function (message) {
       `;
 };
 
-
-
 ///////////
 // Render//
 ///////////
@@ -132,31 +134,20 @@ const render = function () {
 
   $('.new').on('click', function () {
     let inputData = {}
+    let apiValues = {}
+
     inputData.title = $('#title').val()
     inputData.url = $('#url').val()
     inputData.desc = $('#description').val()
-    //inputData.ratings=document.querySelector('select[type='name']'.value)
-    api.createUrl(inputData)
-    .then(function (bookmark){
-      const html = generateBookmark(bookmark);
-      $('main').html(html)
-    })
-    
-    // alert('clicked')
+    inputData.stars =  $("select[name='star']").val()
+
+    apiValues.title = $('#title').val()
+    apiValues.url = $('#url').val()
+
+    api.createUrl(apiValues)
+    generateBookmark(inputData)
   })
-
-
 }
-
-// const renderbookmark = function () {
-
-//   $('main').append(generateBookmark())
-// }
-
-
-
-
-
 
 const handleInput = function () {
   let dataInput = {}
@@ -185,29 +176,13 @@ const handleNewItemSubmit = function () {
   });
 };
 
-
-
 const bindEventListeners = function () {
-  // handleDeleteItemClicked();
   handleNewItemSubmit();
-  // handleUrlSubmit();
-  // handleCreate();
-  //generateItemElement();
-  //generateMain()
-  //HandleNewButton();
-  //handleInput()
-  //SubmitBookmark()
 };
 $(bindEventListeners);
 
 export default {
   render2,
-  //renderbookmark,
   render,
-  //renderbookmark,
-  bindEventListeners,
-  //generateMain,
-  //generateBookmark,
-
-
+  bindEventListeners
 };
