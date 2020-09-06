@@ -1,6 +1,8 @@
 //import { post } from "jquery";
 
-const BASE_URL = 'https://thinkful-list-api.herokuapp.com/Michael';
+import bookmark from "./bookmark";
+
+const BASE_URL = 'https://thinkful-list-api.herokuapp.com/Michael/bookmarks';
 
 const listApiFetch = function (...args) {
   let error;
@@ -31,33 +33,56 @@ const listApiFetch = function (...args) {
     });
 };
 
-function getUrl(){
-  return fetch(`${BASE_URL}/items`).then(function(myRequest){
-    return myRequest;
-  });
+const getSavedUrl= function() {
+  return listApiFetch(`${BASE_URL}/bookmarks`)
+};
+
+// function getUrl(){
+//   return fetch(`${BASE_URL}/bookmarks`).then(function(myRequest){
+//     return myRequest;
+//   });
     
-}
+// }
+const makeBody = (bookmark) => {
+  return {
+    "title": bookmark.title,
+    "url":bookmark.url,
+    "desc":bookmark.desc,
+    "rating":bookmark.rating,
+  };
+};
 
-function createUrl(name){
-  let newUrl = JSON.stringify({name: name});
-  return fetch(`${BASE_URL}/items`,
+function createUrl(bookmark){
+  let body = JSON.stringify(bookmark)
+  return listApiFetch(`${BASE_URL}/bookmarks`,
     {
-      method: 'post',
+      method: 'POST',
       headers: {'content-Type': 'application/json'},
-      body: newUrl}
-  ); 
-}
+      body
+    }); 
+};
 
+const deleteItem =function (id) {
+  return listApiFetch(`${BASE_URL}/bookmarks/${id}`, {
+    method:'Delete'
+  });
+};
 
-const deleteItem = function (id) {
-  return listApiFetch(BASE_URL + '/items/' + id, {
-    method: 'DELETE'
+const updateUrl = function (id,update) {
+  return listApiFetch(`${BASE_URL}/bookmarks/${id}`, {
+    method: 'PATCH',
+    headers: {'Content-Type': 'application/json',},
+    body: JSON.stringify(update)
   });
 };
 
 export default {
-  getUrl,
+  //getUrl,
+  getSavedUrl,
   createUrl,
-  deleteItem
+  deleteItem,
+  updateUrl,
+
+  
 };
 
