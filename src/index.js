@@ -9,11 +9,13 @@ import data from './data'
 
 const main = function(){
     bookmark.render()
-    bookmark.bindEventListeners()
-  
+   bookmark.bindEventListeners()
+
 };
 
 $(main);
+
+
 
 
 

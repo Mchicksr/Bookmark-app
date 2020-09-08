@@ -8,131 +8,88 @@ window.$ = $;
 /////////////////
 // GenerateHTML//
 ////////////////
-const generateItemElement = function (item) {
-  let itemTitle = `<span class="link-item link-item__checked">${item.name}</span>`;
-  if (!item.checked) {
-    console.log('this', item)
 
-    itemTitle = `
-        
-        <form class="js-edit-item">
-          <input class="url-item" type="text" value="${item.name}" required />
-
-        </form>
-      `;
-  }
-
-  return `
-    <li class="js-item-element" data-item-id="${item.id}">
-        ${itemTitle}
-        <div class="url-item-controls">
-          <button class="url-item-toggle js-item-toggle">
-            <span class="button-label">info</span>
-          </button>
-          <button class="url-item-delete js-item-delete">
-            <span class="button-label">delete</span>
-          </button>
-        </div>
-      </li>`;
-};
-
-
+//Html for the inputs and cover
 const generateMain = function () {
-  let bookMarkStart = `
-  <div><h3 class="BookmarkTitle">${data.title}</h3>
-  </div>`;
-  bookMarkStart = `<h3><id= "input-titleEdit" type="text" value="$(bookmark.title)">
-  <span class="inline-edit done"><i class="fas fa-pencil-alt"</span></h3>>
-  `
-
-
-  let urlDesc = "";
-  if (data.desc !== '')
-    urlDesc = `<p>${data.desc}</p>`
+  
+  
   return `
-      <div id=‘${data.id}’ class="bookmark detail">
-      <div class="Main-title">
-        ${bookMarkStart}
+  
       <header>
-          <H1>Bookmark</H1>
+          <H1>Le Bookmark</H1>
       </header>
+      <select name ='star' size='1'>
+      <option value= "1 star" size="1">1 star</option> 
+      <option value= "2 stars" size="1">2 stars</option> 
+      <option value= "3 stars" size="1">3 stars</option> 
+      <option value= "4 stars" size="1">4 stars</option> 
+      <option value= "5 stars" size="1">5 stars</option>
+  </select> 
+      
+      <button id="clickMe">Add Bookmark</button>
+      <div id="myDIV">
+      
+      
+      
       <nav>
-          <h2>New</h2>
-          <h2>options</h2>
+         
             <div class="container">
           <form>
-              <label for='url'>Paste your url here</label><br>
+              <label for='url'>Create Bookmark Here!</label><br>
               <input type='text' id='title' name=title placeholder="title" value="" required><br>
               <input type='text' id='url' name='url' placeholder="url" required></input><br>
-              <input type='textarea' id='description' name='description' placeholder="description">
-              <button id ="new" type = 'button' value="send" class ='new'>New</button> 
+              <textarea type='text' id='description' name='description' placeholder="description"></textarea><br>
+              <button class ='new' type = 'button' value="send" >New</button> 
           
-              <select name ='star' size='1'>
-                  <option value= "1 star" size="1">1 star</option> 
-                  <option value= "2 star" size="1">2 star</option> 
-                  <option value= "3 star" size="1">3 star</option> 
-                  <option value= "4 star" size="1">4 star</option> 
-                  <option value= "5 star" size="1">5 star</option>
-              </select> 
+             
           </form>
           </div>
       </nav>
       </div>
+      </div>
       `
 };
-
+//the Bookark
 const generateBookmark = function (item) {
-  document.querySelector('section').innerHTML += 
-    `<article class='bookmark'>
+  // document.querySelector('section').innerHTML += 
+  return `<article class='bookmark' data-item-id="${item.id}">
         <h2>${item.title}</h2>
-        <p> <a href=${item.url}>${item.url}</a></p> 
+        <p> <a href=${item.url}>${item.title}</a></p> 
         <p>${item.desc}</p>
         <p> ${item.stars}</p>
-      </article>`
-};
+        <button class="delete" type="button" value=delete>Delete</button>
+        <button class="update" type="button" value=update>Update</button>
+        
 
-
-//////////
-//Tester//
-//////////
-
-const generateLinkItemsString = function (linkList) {
-  const items = linkList.map((item) => generateMain(item));
-  return items.join('');
-};
-
-const render2 = function () {
-  renderError();
-  let items = [...store.urls];
-  const BookmarkurlsString = generateLinkItemsString(items);
-  $('main').html(BookmarkurlsString);
-};
-
-const renderError = function () {
-  if (store.error) {
-    const el = generateError(store.error);
-    $('.error-container').html(el);
-  } else {
-    $('.error-container').empty();
-  }
-};
-const generateError = function (message) {
-  return `
-        <section class="error-content">
-          <button id="cancel-error">X</button>
-          <p>${message}</p>
-        </section>
-      `;
+        <button id="info">info</button>
+      <div id="myinfo">
+      <p>hey<p>
+      </div>
+      </article>
+    
+      `
+      
 };
 
 ///////////
 // Render//
 ///////////
+
+//Notes/////////////////////////////////////////
+//this physically puts the the html on the page/
+//also takes information for bookmark //////////
+////////////////////////////////////////////////
+const bookmarks = []
 const render = function () {
+
 
   $('main').html(generateMain())
 
+
+  
   $('.new').on('click', function () {
+    
+
     let inputData = {}
     let apiValues = {}
 
@@ -144,45 +101,181 @@ const render = function () {
     apiValues.title = $('#title').val()
     apiValues.url = $('#url').val()
 
-    api.createUrl(apiValues)
-    generateBookmark(inputData)
+     api.createUrl(apiValues)
+    bookmarks.push(inputData)
+    $('article').html(bookmarks.map(generateBookmark))
+    
+  })
+ 
+}
+
+////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
+//////////////////// eventlisteners/////////////////////////
+//////////////////////////////////////////////////////////
+
+//toggle to open the Header
+
+const toggleClass = function () {
+  
+  document.getElementById('info').addEventListener('click',
+  function (){
+    console.log('toggle clicked')
+  let x = document.getElementById("myinfo")
+  
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
   })
 }
 
-const handleInput = function () {
-  let dataInput = {}
-  dataInput.title = document.querySelector('#title').value
-  console.log(dataInput.title)
-}
+const handleOpenBookmark = function () {
+  document.getElementById('clickMe').addEventListener('click',
+  function (){
+  let x = document.getElementById("myDIV")
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+  })
+};
 
-///////////////////
-// eventlisteners//
-///////////////////
 
-const handleNewItemSubmit = function () {
-  $('main').on('submit', function (event) {
-    event.preventDefault();
-    const newItemName = $('.js-bookmark-entry').val();
-    $('.js-bookmark-entry').val('');
-    api.createUrl(newItemName)
-      .then((newItem) => {
-        store.addUrl(newItem);
-        render();
-      })
-      .catch((error) => {
-        store.setError(error.message);
-        //renderError();
-      });
+
+
+
+// attaches to bookmark ids
+const getItemIdFromElement = function (items) {
+  return $(items)
+    .closest('.bookmark')
+    .data('item-id');
+};
+//Delete bookmark
+const handleDeleteItemClicked = function () {
+  
+  // like in `handleItemCheckClicked`, we use event delegation
+  $('article').on('click', '.delete', event => {
+    console.log("Delete clicked")
+    // get the index of the item in store.items
+    const id = getItemIdFromElement(event.currentTarget);
+    // delete the item
+    store.findAndDelete(id);
+    // render the updated Bookmark
+    api.deleteItem(id).then(function(){
+      store.findAndDelete(id);
+      render();
+    });
+    render();
   });
 };
 
+
+
+//place all eventhandlers
 const bindEventListeners = function () {
-  handleNewItemSubmit();
-};
-$(bindEventListeners);
+  handleOpenBookmark();
+  handleDeleteItemClicked();
+  toggleClass();
+ };
+ //$(bindEventListeners);
 
 export default {
-  render2,
   render,
-  bindEventListeners
+  bindEventListeners,
+  
 };
+
+
+
+//////////
+//Tester//
+//////////
+// const generateItemElement = function (item) {
+//   let itemTitle = `<span class="link-item link-item__checked">${item.name}</span>`;
+//   if (!item.checked) {
+//     console.log('this', item)
+
+//     itemTitle = `
+        
+//         <form class="js-edit-item">
+//           <input class="url-item" type="text" value="${item.name}" required />
+
+//         </form>
+//       `;
+//   }
+
+//   return `
+//     <li class="js-item-element" data-item-id="${item.id}">
+//         ${itemTitle}
+//         <div class="url-item-controls">
+//           <button class="url-item-toggle js-item-toggle">
+//             <span class="button-label">info</span>
+//           </button>
+//           <button class="url-item-delete js-item-delete">
+//             <span class="button-label">delete</span>
+//           </button>
+//         </div>
+//       </li>`;
+// };
+
+
+
+// const generateLinkItemsString = function (linkList) {
+//   const items = linkList.map((item) => generateBookmark(item));
+//   return items.join('');
+// };
+
+// const render2 = function () {
+//   renderError();
+//   let items = [...store.urls];
+//   const BookmarkurlsString = generateLinkItemsString(items);
+//   $('main').html(BookmarkurlsString);
+// };
+
+// const renderError = function () {
+//   if (store.error) {
+//     const el = generateError(store.error);
+//     $('.error-container').html(el);
+//   } else {
+//     $('.error-container').empty();
+//   }
+// };
+// const generateError = function (message) {
+//   return `
+//         <section class="error-content">
+//           <button id="cancel-error">X</button>
+//           <p>${message}</p>
+//         </section>
+//       `;
+// };
+
+// const handleNewItemSubmit = function () {
+//   $('main').on('submit', function (event) {
+//     event.preventDefault();
+//     const newItemName = $('.js-bookmark-entry').val();
+//     $('.js-bookmark-entry').val('');
+//     api.createUrl(newItemName)
+//       .then((newItem) => {
+//         store.addUrl(newItem);
+//         render();
+//       })
+//       .catch((error) => {
+//         store.setError(error.message);
+//         //renderError();
+//       });
+//   });
+// };
+
+// const generateLinkItemsString = function (linkList) {
+//   const items = linkList.map((item) => generateBookmark(item));
+//   return items.join('');
+// };
+
+// const handleInput = function () {
+//   let dataInput = {}
+//   dataInput.title = document.querySelector('#title').value
+//   console.log(dataInput.title)
+// }

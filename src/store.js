@@ -1,17 +1,17 @@
 import data from './data'
 
-const urls = [];
+const items = [];
 let error = null;
 let adding = false;
 const showRating =1;
 // let rank= [
 
 // ]
-
+// Search for bookmark
 const findById = function (id) {
   return this.items.find(currentItem => currentItem.id === id);
 };
-
+//add bookmark
 const addUrl = function (newurl) {
   try {
     this.urls.push(data.create(newurl));
@@ -25,9 +25,10 @@ const addUrl = function (newurl) {
 //   let currenturls = findById(id);
 //   return Object.assign(currenturls, newUrls)
 // }
-
+//Delete bookmark on page
 const findAndDelete = function (id) {
-  this.urls = this.urls.filter(currenturls => currenturls.id !== id);
+  this.items = this.items.filter(currenturls => currenturls.id !== id);
+  
 };
 
 const setError = function (error){
@@ -37,7 +38,7 @@ const setError = function (error){
 
 
 export default {
-  urls,
+  items,
   error,
   adding,
   showRating,
