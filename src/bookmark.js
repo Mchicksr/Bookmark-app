@@ -148,18 +148,22 @@ const handleOpenBookmark = function () {
 
 // attaches to bookmark ids
 const getItemIdFromElement = function (items) {
+ 
   return $(items)
     .closest('.bookmark')
     .data('item-id');
+    
 };
+
 //Delete bookmark
 const handleDeleteItemClicked = function () {
   
   // like in `handleItemCheckClicked`, we use event delegation
+
   $('article').on('click', '.delete', event => {
     const id = getItemIdFromElement(event.currentTarget);
-    console.log("Delete clicked")
     api.deleteItem(id)
+    console.log(id)
     .then(() => {
       store.findAndDelete(id);
       render();
