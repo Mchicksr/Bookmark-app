@@ -1,4 +1,4 @@
-import data from './data'
+import api from './api'
 
 const items = [];
 let error = null;
@@ -14,7 +14,7 @@ const findById = function (id) {
 //add bookmark
 const addUrl = function (newurl) {
   try {
-    this.urls.push(data.create(newurl));
+    this.urls.push(api.create(newurl));
   } catch (error) {
     console.log(error,'no')
   }
@@ -38,13 +38,13 @@ const setError = function (error){
 
 
 export default {
+  findAndDelete,
   items,
   error,
   adding,
   showRating,
-  // updateUrlToStore,
+
   addUrl,
   findById,
-  findAndDelete,
   setError
 };

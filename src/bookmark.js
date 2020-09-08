@@ -121,8 +121,7 @@ const toggleClass = function () {
   document.getElementById('info').addEventListener('click',
   function (){
     console.log('toggle clicked')
-  let x = document.getElementById("myinfo")
-  
+  let x = document.getElementById("myinfo") 
   if (x.style.display === "none") {
     x.style.display = "block";
   } else {
@@ -158,17 +157,18 @@ const handleDeleteItemClicked = function () {
   
   // like in `handleItemCheckClicked`, we use event delegation
   $('article').on('click', '.delete', event => {
-    console.log("Delete clicked")
-    // get the index of the item in store.items
     const id = getItemIdFromElement(event.currentTarget);
-    // delete the item
-    store.findAndDelete(id);
-    // render the updated Bookmark
-    api.deleteItem(id).then(function(){
+    console.log("Delete clicked")
+    api.deleteItem(id)
+    .then(() => {
       store.findAndDelete(id);
       render();
+    })
+    .catch((error) => {
+      console.log(error);
+      store.setError(error.message);
+      renderError();
     });
-    render();
   });
 };
 

@@ -2,7 +2,7 @@
 
 import bookmark from "./bookmark";
 //Api URL
-const BASE_URL = 'https://thinkful-list-api.herokuapp.com/Michael/bookmarks';
+const BASE_URL = 'https://thinkful-list-api.herokuapp.com/MichaelHR/bookmarks';
 //Api catcher
 const listApiFetch = function (...args) {
   let error;
@@ -44,24 +44,26 @@ const getSavedUrl= function() {
     
 // }
 // Formats API for Bookmark
-function createUrl(bookmark){
-  let body = JSON.stringify(bookmark)
+function createUrl(name){
+  let newItem = JSON.stringify({name})
 
-
-  fetch(`${BASE_URL}`, {
-  method: 'POST',
-  headers: {
-      'Accept': 'application/json, text/plain, */*',
+  return listApiFetch(`${BASE_URL}/bookmarks`, {
+    method: 'POST',
+    headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(bookmark)
-  }).then(res=>res.json()).then(res => console.log(res));
+    body: newItem
+  });
 
 };
+// const getItems = function () {
+//   return listApiFetch(`${BASE_URL}/items`);
+// };
+
 //delete api bookmark
 const deleteItem =function (id) {
   console.log(id,'123')
-  return listApiFetch(`${BASE_URL}/bookmarks/${id}`,
+  return listApiFetch(BASE_URL + '/bookmarks/' + id, 
    {
     method:'DELETE'
   });
@@ -76,7 +78,7 @@ const updateUrl = function (id,update) {
 };
 
 export default {
-  //getUrl,
+  //getItems,
   getSavedUrl,
   createUrl,
   deleteItem,
