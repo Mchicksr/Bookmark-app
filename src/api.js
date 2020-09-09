@@ -44,18 +44,24 @@ const getSavedUrl= function() {
     
 // }
 // Formats API for Bookmark
-function createUrl(name){
-  let newItem = JSON.stringify({name})
 
-  return listApiFetch(`${BASE_URL}/bookmarks`, {
-    method: 'POST',
-    headers: {
+function createUrl(bookmark){
+  let body = JSON.stringify(bookmark)
+
+
+  fetch(`${BASE_URL}`, {
+  method: 'POST',
+  headers: {
+      'Accept': 'application/json, text/plain, */*',
       'Content-Type': 'application/json'
     },
-    body: newItem
-  });
+    body: JSON.stringify(bookmark)
+  }).then(res=>res.json()).then(res => console.log(res));
 
 };
+
+
+
 // const getItems = function () {
 //   return listApiFetch(`${BASE_URL}/items`);
 // };

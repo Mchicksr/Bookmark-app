@@ -92,7 +92,9 @@ const render = function () {
 
     let inputData = {}
     let apiValues = {}
-
+ 
+    // inputData.id = $('#id').val()
+    console.log(inputData)
     inputData.title = $('#title').val()
     inputData.url = $('#url').val()
     inputData.desc = $('#description').val()
@@ -100,8 +102,13 @@ const render = function () {
 
     apiValues.title = $('#title').val()
     apiValues.url = $('#url').val()
-
-     api.createUrl(apiValues)
+    apiValues.desc = $('#description').val()
+    apiValues.stars =  $("select[name='star']").val()
+    
+    apiValues.stars=parseInt(apiValues.stars.charAt(0))
+    console.log(apiValues.stars)
+     let response = api.createUrl(apiValues)
+     console.log(response)
     bookmarks.push(inputData)
     $('article').html(bookmarks.map(generateBookmark))
     
@@ -148,7 +155,6 @@ const handleOpenBookmark = function () {
 
 // attaches to bookmark ids
 const getItemIdFromElement = function (items) {
- 
   return $(items)
     .closest('.bookmark')
     .data('item-id');
