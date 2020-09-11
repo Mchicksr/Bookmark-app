@@ -1,6 +1,6 @@
 //import { post } from "jquery";
 
-import bookmark from "./bookmark";
+
 //Api URL
 const BASE_URL = 'https://thinkful-list-api.herokuapp.com/MichaelHR/bookmarks';
 //Api catcher
@@ -34,7 +34,7 @@ const listApiFetch = function (...args) {
 };
 
 const getSavedUrl= function() {
-  return listApiFetch(`${BASE_URL}/bookmarks`)
+  return listApiFetch(`${BASE_URL}`)
 };
 
 // function getUrl(){
@@ -45,8 +45,8 @@ const getSavedUrl= function() {
 // }
 // Formats API for Bookmark
 
-function createUrl(bookmark){
-  let body = JSON.stringify(bookmark)
+function createUrl(bookmarks){
+  let body = JSON.stringify(bookmarks)
 
 
   fetch(`${BASE_URL}`, {
@@ -55,10 +55,15 @@ function createUrl(bookmark){
       'Accept': 'application/json, text/plain, */*',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(bookmark)
-  }).then(res=>res.json()).then(res => console.log(res));
+    body: JSON.stringify(bookmarks)
+  }).then(res=>res.json()).then(res =>{ 
+    bookmarks.id = res.id
+    return bookmarks
+  
+  });
 
 };
+
 
 
 
@@ -66,17 +71,26 @@ function createUrl(bookmark){
 //   return listApiFetch(`${BASE_URL}/items`);
 // };
 
-//delete api bookmark
+//delete api bookmarks
 const deleteItem =function (id) {
-  console.log(id,'123')
-  return listApiFetch(BASE_URL + '/bookmarks/' + id, 
-   {
-    method:'DELETE'
-  });
-};
+  //console.log('123',id)
+  console.log("hey")
+  fetch(`${BASE_URL}/${id}`,
+  {    method: 'delete'  })
+  .then(response =>  response.json()
+  .then(json => 
+    { console.log(json);
+    })  
+    );}
+//   return listApiFetch(`${BASE_URL}/${id}`, 
+//    {
+//     method:'DELETE'
+//   });
+  
+// };
 //update api bookmark
 const updateUrl = function (id,update) {
-  return listApiFetch(`${BASE_URL}/bookmarks/${id}`, {
+  return listApiFetch(`${BASE_URL}/${id}`, {
     method: 'PATCH',
     headers: {'Content-Type': 'application/json',},
     body: JSON.stringify(update)

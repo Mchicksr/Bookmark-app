@@ -11,8 +11,8 @@ window.$ = $;
 
 //Html for the inputs and cover
 const generateMain = function () {
-  
-  
+
+
   return `
   
       <header>
@@ -52,24 +52,36 @@ const generateMain = function () {
 //the Bookark
 const generateBookmark = function (item) {
   // document.querySelector('section').innerHTML += 
-  return `<article class='bookmark' data-item-id="${item.id}">
+  console.log(item)
+  return `<article class='bookmarks' data-item-id="${item.id}">
         <h2>${item.title}</h2>
+        <p>${item.id}<p>
         <p> <a href=${item.url}>${item.title}</a></p> 
         <p>${item.desc}</p>
-        <p> ${item.stars}</p>
+        <p> ${item.rating}</p>
         <button class="delete" type="button" value=delete>Delete</button>
         <button class="update" type="button" value=update>Update</button>
         
-
         <button id="info">info</button>
-      <div id="myinfo">
+        <div id="myinfo">
       <p>hey<p>
       </div>
       </article>
     
+    
       `
-      
+
 };
+
+// const generateInfo = function () {
+//   return `
+  
+  // <button id="info">info</button>
+  //   <div id="myinfo">
+  // <p>hey<p>
+  // </div>
+  // </article>`
+// }
 
 ///////////
 // Render//
@@ -86,34 +98,35 @@ const render = function () {
   $('main').html(generateMain())
 
 
-  
+
   $('.new').on('click', function () {
-    
+
 
     let inputData = {}
     let apiValues = {}
- 
-    // inputData.id = $('#id').val()
+
+    inputData.id = $('#id').val()
     console.log(inputData)
     inputData.title = $('#title').val()
     inputData.url = $('#url').val()
     inputData.desc = $('#description').val()
-    inputData.stars =  $("select[name='star']").val()
+    inputData.rating = $("select[name='star']").val()
 
+    apiValues.id = $('#id').val()
     apiValues.title = $('#title').val()
     apiValues.url = $('#url').val()
     apiValues.desc = $('#description').val()
-    apiValues.stars =  $("select[name='star']").val()
-    
-    apiValues.stars=parseInt(apiValues.stars.charAt(0))
-    console.log(apiValues.stars)
-     let response = api.createUrl(apiValues)
-     console.log(response)
-    bookmarks.push(inputData)
+    apiValues.rating = $("select[name='star']").val()
+
+    apiValues.rating = parseInt(apiValues.rating.charAt(0))
+    //console.log(apiValues.rating)
+    let response = api.createUrl(apiValues)
+    console.log("this one",response)
+    bookmarks.push( apiValues)
     $('article').html(bookmarks.map(generateBookmark))
-    
+
   })
- 
+
 }
 
 ////////////////////////////////////////////////////////////
@@ -124,29 +137,28 @@ const render = function () {
 //toggle to open the Header
 
 const toggleClass = function () {
-  
-  document.getElementById('info').addEventListener('click',
-  function (){
-    console.log('toggle clicked')
-  let x = document.getElementById("myinfo") 
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "none";
-  }
-  })
+  $('article').on('click', '#info', event =>  {
+      console.log('toggle clicked')
+      let x = document.getElementById("myinfo")
+      if (x.style.display === "none") {
+        x.style.display = "block";
+      } else {
+        x.style.display = "none";
+      }
+
+    })
 }
 
 const handleOpenBookmark = function () {
   document.getElementById('clickMe').addEventListener('click',
-  function (){
-  let x = document.getElementById("myDIV")
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "none";
-  }
-  })
+    function () {
+      let x = document.getElementById("myDIV")
+      if (x.style.display === "none") {
+        x.style.display = "block";
+      } else {
+        x.style.display = "none";
+      }
+    })
 };
 
 
@@ -154,31 +166,31 @@ const handleOpenBookmark = function () {
 
 
 // attaches to bookmark ids
-const getItemIdFromElement = function (items) {
-  return $(items)
-    .closest('.bookmark')
+const getItemIdFromElement = function (item) {
+  return $(item)
+    .closest('.bookmarks')
     .data('item-id');
-    
+
 };
 
 //Delete bookmark
 const handleDeleteItemClicked = function () {
-  
+
   // like in `handleItemCheckClicked`, we use event delegation
 
   $('article').on('click', '.delete', event => {
     const id = getItemIdFromElement(event.currentTarget);
     api.deleteItem(id)
     console.log(id)
-    .then(() => {
-      store.findAndDelete(id);
-      render();
-    })
-    .catch((error) => {
-      console.log(error);
-      store.setError(error.message);
-      renderError();
-    });
+      .then(() => {
+        store.findAndDelete(id);
+        render();
+      })
+      .catch((error) => {
+        console.log(error);
+        store.setError(error.message);
+        //renderError();
+      });
   });
 };
 
@@ -189,13 +201,13 @@ const bindEventListeners = function () {
   handleOpenBookmark();
   handleDeleteItemClicked();
   toggleClass();
- };
- //$(bindEventListeners);
+};
+//$(bindEventListeners);
 
 export default {
   render,
   bindEventListeners,
-  
+
 };
 
 
@@ -209,7 +221,7 @@ export default {
 //     console.log('this', item)
 
 //     itemTitle = `
-        
+
 //         <form class="js-edit-item">
 //           <input class="url-item" type="text" value="${item.name}" required />
 
