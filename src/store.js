@@ -3,7 +3,7 @@ import api from './api'
 const items = [];
 let error = null;
 let adding = false;
-const showRating =1;
+const showRating = 1;
 // let rank= [
 
 // ]
@@ -21,6 +21,9 @@ const addUrl = function (newurl) {
  
 };
 
+const toggleAddNewBookmark = function () {
+  this.adding = !this.adding;
+}
 // const updateUrlToStore = function (id){
 //   let currenturls = findById(id);
 //   return Object.assign(currenturls, newUrls)
@@ -43,7 +46,7 @@ export default {
   error,
   adding,
   showRating,
-
+  toggleAddNewBookmark,
   addUrl,
   findById,
   setError

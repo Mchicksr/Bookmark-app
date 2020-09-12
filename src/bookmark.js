@@ -55,15 +55,15 @@ const generateBookmark = function (item) {
   console.log(item)
   return `<article class='bookmarks' data-item-id="${item.id}">
         <h2>${item.title}</h2>
-        <p>${item.id}<p>
         <p> <a href=${item.url}>${item.title}</a></p> 
         <p>${item.desc}</p>
-        <p> ${item.rating}</p>
+        <p> ${item.rating} stars</p>
         <button class="delete" type="button" value=delete>Delete</button>
         <button class="update" type="button" value=update>Update</button>
         
         <button id="info">info</button>
         <div id="myinfo">
+        <p> <a href=${item.url}>${item.url}</a></p>
       <p>hey<p>
       </div>
       </article>
@@ -99,30 +99,20 @@ const render = function () {
 
 
 
-  $('.new').on('click', function () {
-
-
-    let inputData = {}
+  $('.new').on('click', async function () {
     let apiValues = {}
-
-    inputData.id = $('#id').val()
-    console.log(inputData)
-    inputData.title = $('#title').val()
-    inputData.url = $('#url').val()
-    inputData.desc = $('#description').val()
-    inputData.rating = $("select[name='star']").val()
 
     apiValues.id = $('#id').val()
     apiValues.title = $('#title').val()
     apiValues.url = $('#url').val()
     apiValues.desc = $('#description').val()
     apiValues.rating = $("select[name='star']").val()
-
     apiValues.rating = parseInt(apiValues.rating.charAt(0))
-    //console.log(apiValues.rating)
-    let response = api.createUrl(apiValues)
-    console.log("this one",response)
-    bookmarks.push( apiValues)
+
+    await api.createUrl(apiValues)
+
+    console.log('api values 2', apiValues)
+    bookmarks.push(apiValues)
     $('article').html(bookmarks.map(generateBookmark))
 
   })
@@ -150,8 +140,8 @@ const toggleClass = function () {
 }
 
 const handleOpenBookmark = function () {
-  document.getElementById('clickMe').addEventListener('click',
-    function () {
+  $('Main').on('click', '#clickMe',event => {
+    console.log('sec toggle')
       let x = document.getElementById("myDIV")
       if (x.style.display === "none") {
         x.style.display = "block";
@@ -161,12 +151,9 @@ const handleOpenBookmark = function () {
     })
 };
 
-
-
-
-
 // attaches to bookmark ids
 const getItemIdFromElement = function (item) {
+  console.log($(item).closest('.bookmarks').data('item-id'))
   return $(item)
     .closest('.bookmarks')
     .data('item-id');
@@ -177,11 +164,12 @@ const getItemIdFromElement = function (item) {
 const handleDeleteItemClicked = function () {
 
   // like in `handleItemCheckClicked`, we use event delegation
-
   $('article').on('click', '.delete', event => {
     const id = getItemIdFromElement(event.currentTarget);
+
+    // TODO: there is some kind of error here
+    console.log('the api', api)
     api.deleteItem(id)
-    console.log(id)
       .then(() => {
         store.findAndDelete(id);
         render();
@@ -207,7 +195,7 @@ const bindEventListeners = function () {
 export default {
   render,
   bindEventListeners,
-
+  bookmarks,
 };
 
 

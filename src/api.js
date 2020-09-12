@@ -1,4 +1,5 @@
 //import { post } from "jquery";
+//import { bookmarks } from 'bookmark'
 
 
 //Api URL
@@ -44,28 +45,21 @@ const getSavedUrl= function() {
     
 // }
 // Formats API for Bookmark
-
-function createUrl(bookmarks){
+async function createUrl(bookmarks) {
   let body = JSON.stringify(bookmarks)
 
-
-  fetch(`${BASE_URL}`, {
+  await fetch(`${BASE_URL}`, {
   method: 'POST',
   headers: {
-      'Accept': 'application/json, text/plain, */*',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(bookmarks)
-  }).then(res=>res.json()).then(res =>{ 
+    'Accept': 'application/json, text/plain, */*',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(bookmarks)
+  }).then(res=> res.json()).then(res =>{ 
     bookmarks.id = res.id
-    return bookmarks
-  
+    return res
   });
-
 };
-
-
-
 
 // const getItems = function () {
 //   return listApiFetch(`${BASE_URL}/items`);
@@ -73,21 +67,38 @@ function createUrl(bookmarks){
 
 //delete api bookmarks
 const deleteItem =function (id) {
-  //console.log('123',id)
-  console.log("hey")
+  // delete from the api
   fetch(`${BASE_URL}/${id}`,
-  {    method: 'delete'  })
-  .then(response =>  response.json()
-  .then(json => 
-    { console.log(json);
-    })  
-    );}
+  { method: 'delete' })
+  .then(response =>  response.json())
+  .then(json => json)
+
+  // TODO: delete item from the bookmarks array id
+  // loop through bookmarks and delete the one with the id
+  /*
+  let counter = 0
+  for(let e of bookmarks)
+    if(e.id === id)
+      bookmarks.remove(counter)
+  }
+  */
+
+
+  //remove bookmark in ui
+  $(event.target).closest('.bookmarks').remove();
+
+
+// TODO: Maybe try this, you don't need it but it might also work
 //   return listApiFetch(`${BASE_URL}/${id}`, 
 //    {
 //     method:'DELETE'
 //   });
-  
-// };
+//};
+}
+
+
+
+
 //update api bookmark
 const updateUrl = function (id,update) {
   return listApiFetch(`${BASE_URL}/${id}`, {
@@ -103,6 +114,4 @@ export default {
   createUrl,
   deleteItem,
   updateUrl,
-
-  
 };
