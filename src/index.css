@@ -3,6 +3,8 @@
     padding: 0;
     font-family: 'Kalam', cursive;
 }
+
+
 body{
     display: flex;
     flex-flow: column;
@@ -86,7 +88,10 @@ button{
     border-radius:4px;
 }
 
-
-
-
+@media all and (min-width:375px) {
+    body{
+        width:80%;
+        margin:auto;
+    }
+}
 

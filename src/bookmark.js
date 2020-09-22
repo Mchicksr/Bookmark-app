@@ -9,24 +9,28 @@ window.$ = $;
 // GenerateHTML//
 ////////////////
 
-//Html for the inputs and cover
+
+$('section').prepend(`
+<header>
+          <H1>Le Bookmark</H1>
+        
+      </header>
+      <select name ='star' size='1'>
+      <option value= "1 star"  >1 star</option> 
+      <option value= "2 stars" >2 stars</option> 
+      <option value= "3 stars" >3 stars</option> 
+      <option value= "4 stars" >4 stars</option> 
+      <option value= "5 stars" >5 stars</option>
+  </select> 
+<button id="clickMe">Add Bookmark</button>
+
+`)
+
 const generateMain = function () {
 
 
   return `
-  
-      <header>
-          <H1>Le Bookmark</H1>
-      </header>
-      <select name ='star' size='1'>
-      <option value= "1 star" size="1">1 star</option> 
-      <option value= "2 stars" size="1">2 stars</option> 
-      <option value= "3 stars" size="1">3 stars</option> 
-      <option value= "4 stars" size="1">4 stars</option> 
-      <option value= "5 stars" size="1">5 stars</option>
-  </select> 
       
-      <button id="clickMe">Add Bookmark</button>
       <div id="myDIV">
       
       
@@ -36,23 +40,28 @@ const generateMain = function () {
             <div class="container">
           <form>
               <label for='url'>Create Bookmark Here!</label><br>
-              <input type='text' id='title' name=title placeholder="title" value="" required><br>
-              <input type='text' id='url' name='url' placeholder="url" required></input><br>
-              <textarea type='text' id='description' name='description' placeholder="description"></textarea><br>
-              <button class ='new' type = 'button' value="send" >New</button> 
+              <input type='text' id='title' name='title' placeholder="title" required /><br>
+              <input type='text' id='url' name='url' placeholder="url" required/> <br>
+              <textarea  id='description' name='description' placeholder="description" ></textarea><br>
+              <button class ='new' type = 'submit' value="send" >New</button> 
           
              
           </form>
           </div>
       </nav>
       </div>
-      </div>
       `
 };
+
+
+
+
+
+
 //the Bookark
 const generateBookmark = function (item) {
   // document.querySelector('section').innerHTML += 
-  console.log(item)
+  //console.log(item)
   return `<article class='bookmarks' data-item-id="${item.id}">
         <h2>${item.title}</h2>
         <p> <a href=${item.url}>${item.title}</a></p> 
@@ -67,20 +76,21 @@ const generateBookmark = function (item) {
       <p>hey<p>
       </div>
       </article>
-    
-    
       `
 
 };
 
+
+
+
 // const generateInfo = function () {
 //   return `
-  
-  // <button id="info">info</button>
-  //   <div id="myinfo">
-  // <p>hey<p>
-  // </div>
-  // </article>`
+
+// <button id="info">info</button>
+//   <div id="myinfo">
+// <p>hey<p>
+// </div>
+// </article>`
 // }
 
 ///////////
@@ -92,14 +102,24 @@ const generateBookmark = function (item) {
 //also takes information for bookmark //////////
 ////////////////////////////////////////////////
 const bookmarks = []
+
 const render = function () {
 
 
-  $('main').html(generateMain())
+  //$('main').html(generateMain())
+  if (store.adding) {
+    $('main').html(generateMain())
+  } else {
+    $('main').empty();
+  }
 
+  // $(".new").click(function () {
+  //   console.log('reset')
+  //   $("form").trigger("reset");
+  // });
 
-
-  $('.new').on('click', async function () {
+   $('.new').on('click', async function () {
+    
     let apiValues = {}
 
     apiValues.id = $('#id').val()
@@ -111,13 +131,19 @@ const render = function () {
 
     await api.createUrl(apiValues)
 
-    console.log('api values 2', apiValues)
+    //console.log('api values 2', apiValues)
     bookmarks.push(apiValues)
     $('article').html(bookmarks.map(generateBookmark))
+
+    
+
+    $("form").trigger("reset");
+    
 
   })
 
 }
+
 
 ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
@@ -126,34 +152,48 @@ const render = function () {
 
 //toggle to open the Header
 
-const toggleClass = function () {
-  $('article').on('click', '#info', event =>  {
-      console.log('toggle clicked')
-      let x = document.getElementById("myinfo")
-      if (x.style.display === "none") {
-        x.style.display = "block";
-      } else {
-        x.style.display = "none";
-      }
-
-    })
+if (store.adding) {
+  $('#myinfo').html(generateBookmark())
+} else {
+  $('#myinfo').empty();
 }
 
+
+const toggleClass = function () {
+  $('#info').click(() => {
+    console.log('infooooo')
+    store.toggleAddNewBookmark();
+    render();
+    
+  })
+ 
+ 
+  // $('article').on('click', '#info', event => {
+  //   console.log('toggle clicked')
+  //   let x = document.getElementById("myinfo")
+  //   if (x.style.display === "none") {
+  //     x.style.display = "block";
+  //   } else {
+  //     x.style.display = "none";
+  //   }
+
+  // })
+}
+
+
+
 const handleOpenBookmark = function () {
-  $('Main').on('click', '#clickMe',event => {
-    console.log('sec toggle')
-      let x = document.getElementById("myDIV")
-      if (x.style.display === "none") {
-        x.style.display = "block";
-      } else {
-        x.style.display = "none";
-      }
-    })
+  $('#clickMe').click(() => {
+    store.toggleAddNewBookmark();
+    render();
+    
+  })
+
 };
 
 // attaches to bookmark ids
 const getItemIdFromElement = function (item) {
-  console.log($(item).closest('.bookmarks').data('item-id'))
+  //console.log($(item).closest('.bookmarks').data('item-id'))
   return $(item)
     .closest('.bookmarks')
     .data('item-id');
@@ -168,17 +208,17 @@ const handleDeleteItemClicked = function () {
     const id = getItemIdFromElement(event.currentTarget);
 
     // TODO: there is some kind of error here
-    console.log('the api', api)
+    //console.log('the api', api)
     api.deleteItem(id)
-      .then(() => {
-        store.findAndDelete(id);
-        render();
-      })
-      .catch((error) => {
-        console.log(error);
-        store.setError(error.message);
-        //renderError();
-      });
+      // .then(() => {
+      //   store.findAndDelete(id);
+      //   render();
+      // })
+      // .catch((error) => {
+      //   console.log(error);
+      //   store.setError(error.message);
+      //   //renderError();
+      // });
   });
 };
 
@@ -199,93 +239,3 @@ export default {
 };
 
 
-
-//////////
-//Tester//
-//////////
-// const generateItemElement = function (item) {
-//   let itemTitle = `<span class="link-item link-item__checked">${item.name}</span>`;
-//   if (!item.checked) {
-//     console.log('this', item)
-
-//     itemTitle = `
-
-//         <form class="js-edit-item">
-//           <input class="url-item" type="text" value="${item.name}" required />
-
-//         </form>
-//       `;
-//   }
-
-//   return `
-//     <li class="js-item-element" data-item-id="${item.id}">
-//         ${itemTitle}
-//         <div class="url-item-controls">
-//           <button class="url-item-toggle js-item-toggle">
-//             <span class="button-label">info</span>
-//           </button>
-//           <button class="url-item-delete js-item-delete">
-//             <span class="button-label">delete</span>
-//           </button>
-//         </div>
-//       </li>`;
-// };
-
-
-
-// const generateLinkItemsString = function (linkList) {
-//   const items = linkList.map((item) => generateBookmark(item));
-//   return items.join('');
-// };
-
-// const render2 = function () {
-//   renderError();
-//   let items = [...store.urls];
-//   const BookmarkurlsString = generateLinkItemsString(items);
-//   $('main').html(BookmarkurlsString);
-// };
-
-// const renderError = function () {
-//   if (store.error) {
-//     const el = generateError(store.error);
-//     $('.error-container').html(el);
-//   } else {
-//     $('.error-container').empty();
-//   }
-// };
-// const generateError = function (message) {
-//   return `
-//         <section class="error-content">
-//           <button id="cancel-error">X</button>
-//           <p>${message}</p>
-//         </section>
-//       `;
-// };
-
-// const handleNewItemSubmit = function () {
-//   $('main').on('submit', function (event) {
-//     event.preventDefault();
-//     const newItemName = $('.js-bookmark-entry').val();
-//     $('.js-bookmark-entry').val('');
-//     api.createUrl(newItemName)
-//       .then((newItem) => {
-//         store.addUrl(newItem);
-//         render();
-//       })
-//       .catch((error) => {
-//         store.setError(error.message);
-//         //renderError();
-//       });
-//   });
-// };
-
-// const generateLinkItemsString = function (linkList) {
-//   const items = linkList.map((item) => generateBookmark(item));
-//   return items.join('');
-// };
-
-// const handleInput = function () {
-//   let dataInput = {}
-//   dataInput.title = document.querySelector('#title').value
-//   console.log(dataInput.title)
-// }

@@ -12,11 +12,12 @@ const findById = function (id) {
   return this.items.find(currentItem => currentItem.id === id);
 };
 //add bookmark
+
 const addUrl = function (newurl) {
   try {
-    this.urls.push(api.create(newurl));
+    this.items.push(api.create(newurl));
   } catch (error) {
-    console.log(error,'no')
+    //console.log(error,'no')
   }
  
 };
