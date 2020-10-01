@@ -4,31 +4,25 @@ const items = [];
 let error = null;
 let adding = false;
 const showRating = 1;
-// let rank= [
 
-// ]
-// Search for bookmark
+// search for a bookmark
 const findById = function (id) {
   return this.items.find(currentItem => currentItem.id === id);
 };
-//add bookmark
 
+// add bookmark
 const addUrl = function (newurl) {
   try {
     this.items.push(api.create(newurl));
   } catch (error) {
-    //console.log(error,'no')
+    console.log(error,'no')
   }
- 
 };
 
 const toggleAddNewBookmark = function () {
   this.adding = !this.adding;
 }
-// const updateUrlToStore = function (id){
-//   let currenturls = findById(id);
-//   return Object.assign(currenturls, newUrls)
-// }
+
 //Delete bookmark on page
 const findAndDelete = function (id) {
   this.items = this.items.filter(currenturls => currenturls.id !== id);
