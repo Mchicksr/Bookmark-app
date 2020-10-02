@@ -10,7 +10,7 @@ const findById = function (id) {
   return this.items.find(currentItem => currentItem.id === id);
 };
 
-// add bookmark
+// add a bookmark
 const addUrl = function (newurl) {
   try {
     this.items.push(api.create(newurl));
@@ -32,8 +32,6 @@ const findAndDelete = function (id) {
 const setError = function (error){
   this.error = error;
 };
-
-
 
 export default {
   findAndDelete,

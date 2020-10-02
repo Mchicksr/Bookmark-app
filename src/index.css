@@ -4,7 +4,6 @@
     font-family: 'Kalam', cursive;
 }
 
-
 body {
     display: flex;
     flex-flow: column;
@@ -13,12 +12,9 @@ body {
 }
 
 header {
-margin: 0;
-text-align: center;
-
+    margin: 0;
+    text-align: center;
 }
-
-
 
 section {
     border: 5px solid black;
@@ -30,23 +26,10 @@ section {
 }
 
 nav {
-    
     flex-direction: row;
     display: flex;
     padding-left:100px;
     padding-right:100px;
-    
-}
-
-/*nav h2{
-    border: 2px solid black;
-    margin-left: 30px;
-    margin-right: 30px;
-
-}*/
-
-form {
-  /*padding-left:70px;*/
 }
 
 input {
@@ -54,33 +37,13 @@ input {
 }
 
 textarea {
-  width: 300px;  
+    width: 300px;  
 }
-
-
-
-/*
-form button {
-
-    width: 90px;
-    height: 30px;
-
-}
-
-form select {
-
-    width: 90px;
-    height: 30px;
-
-}
-*/
-
 
 
 main li {
     list-style-type: none;  
     width: 700px;
-    
 }
 
 h1 {
@@ -91,7 +54,6 @@ h1 {
 article {
     border: 1px solid black;
     background-color:rgba(19, 230, 212, 0.466);
-   
 }
 
 button {
