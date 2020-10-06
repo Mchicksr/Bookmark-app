@@ -3,7 +3,7 @@ import bookmark from './bookmark'
 
 
 //Api URL
-const BASE_URL = 'https://thinkful-list-api.herokuapp.com/MichaelHR/bookmarks';
+const BASE_URL = 'https://thinkful-list-api.herokuapp.com/michaelHR/bookmarks';
 
 //Api catcher
 const listApiFetch = function (...args) {
@@ -83,12 +83,12 @@ const deleteItem = function (id = 0, bookmarks) {
   $(event.target).closest('.bookmarks').remove();
 
   // delete from the api
-  /*
+  
   fetch(`${BASE_URL}/${id}`,
   { method: 'delete' })
   .then(response =>  response.json())
   .then(json => json)
-  */
+  
 
   //delete element with id from bookmarks
   let ret = bookmarks.filter(e => e.id !== bkid)

@@ -43,11 +43,12 @@ const generateMain = function () {
         <div class="container">
           <form>
               <label for='url'>Create Bookmark Here!</label><br>
-              <input type='text' id='title' name='title' placeholder="title" required/><br>
-              <input type='text' id='url' name='url' placeholder="url" required/><br>
+              <input type='text' id='title' name='title' placeholder="title" required><br>
+              <input type='text' id='url' name='url' placeholder="url" required><br>
               <textarea id='description' name='description' placeholder="description"></textarea><br>
-              <button class='new' type = 'submit' value="send" >New</button> 
+              <button class='new' type = 'submit' value="submit" >New</button> 
           </form>
+         
         </div>
     </nav>
     </div>
@@ -86,7 +87,8 @@ console.log('SESSION STORAGE BOOKMARKS', JSON.parse(sessionStorage.getItem("book
 if(JSON.parse(sessionStorage.getItem("bookmarks")) != null)
   bookmarks = JSON.parse(sessionStorage.getItem("bookmarks"));
 
-const render = function (e) {
+const render = function () {
+  
   //console.log('render called...')
 
   if (store.adding) {
@@ -97,29 +99,39 @@ const render = function (e) {
     //console.log('main empty...')
     $('main').empty();
   }
-
-  $('.new').on('click', async function () {
-    
+  
+  $( "form" ).on( "submit", async function(e) {  
+    e.preventDefault();
+    console.log('click')
+    //  e.preventDefault()
     let apiValues = {}
 
     apiValues.id = $('#id').val()
-    if(!apiValues.id)
-      apiValues.id = uuidv4()
+    // if(!apiValues.id)
+      // apiValues.id = uuidv4()
 
     apiValues.title = $('#title').val()
     apiValues.url = $('#url').val()
     apiValues.desc = $('#description').val()
     apiValues.rating = $("select[name='star']").val()
     apiValues.rating = parseInt(apiValues.rating.charAt(0))
-
-    //await api.createUrl(apiValues)
+    
+   
+    await api.createUrl(apiValues)
+    
     bookmarks.push(apiValues)
-    updateSessionStorage(bookmarks)
+    
 
+    updateSessionStorage(bookmarks)
+    e.preventDefault()
     console.log('BOOKMARKS', bookmarks)
+   
     $('article').html(bookmarks.map(generateBookmark))
+    
     $("form").trigger("reset");
+    
   })
+  
 }
 
 
