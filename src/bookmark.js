@@ -58,16 +58,24 @@ const generateMain = function () {
 //generate a bookmark
 const generateBookmark = function (item) {
   //console.log('generate bookmark called...')
-  return `<article class='bookmarks' data-item-id="${item.id}">
+  return `
+ 
+ 
+  <article class='bookmarks' data-item-id="${item.id}">
+  <details>
+  <summary>
     <h2>${item.title}</h2>
     <p>ID: ${item.id}</p>
     <p>Title: <a href=${item.url} target="_blank">${item.title}</a></p> 
+  </summary>
     <p>Description: ${item.desc}</p>
     <p>Rating: ${item.rating} stars</p>
+  </details>
     <button class="delete" type="button" value=delete>Delete</button>
     <button class="update" type="button" value=update>Update</button>
     <button id="info">info</button>
   </article>
+  
   `
 };
 
